@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: org.springframework.boot:spring-boot-http-converter:4.1.2" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.springframework.boot" artifactId="spring-boot-http-converter" version="4.1.2" baseVersion="4.1.2" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-http-converter/4.1.2/5289812d78a000ece5b77ecc081c7b0608431a44/spring-boot-http-converter-4.1.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-http-converter/4.1.2/6111088942115e6a99c4a296f7c2571d2a939882/spring-boot-http-converter-4.1.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

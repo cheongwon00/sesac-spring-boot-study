@@ -1,1 +1,0 @@
-rootProject.name = "sesac-spring-boot-study"
