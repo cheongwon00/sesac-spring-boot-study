@@ -1,11 +1,12 @@
 package com.example.personal_project.infrastructure;
 
-import com.example.personal_project.domain.CollectionItem;
+import com.example.personal_project.domain.entity.CollectionItem;
 import com.example.personal_project.domain.CollectionItemRepository;
-import com.example.personal_project.domain.EntityNotFoundException;
+import com.example.personal_project.domain.exception.CommonNotFoundException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -28,6 +29,12 @@ public class ListCollectionItemRepository implements CollectionItemRepository {
         return collectionItems.stream()
                 .filter(item->item.sameId(id))
                 .findFirst()
-                .orElseThrow(()->new EntityNotFoundException("해당 id로 item을 찾을 수 없습니다"));
+                .orElseThrow(()->new CommonNotFoundException("해당 id로 item을 찾을 수 없습니다"));
+    }
+
+    public Boolean existsByExternalId(Long externalId) {
+        return collectionItems.stream()
+                .anyMatch(item ->
+                        Objects.equals(item.getExternalId(), externalId));
     }
 }

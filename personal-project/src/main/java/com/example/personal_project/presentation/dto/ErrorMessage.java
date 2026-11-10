@@ -1,4 +1,4 @@
-package com.example.personal_project.presentation;
+package com.example.personal_project.presentation.dto;
 
 import java.util.List;
 

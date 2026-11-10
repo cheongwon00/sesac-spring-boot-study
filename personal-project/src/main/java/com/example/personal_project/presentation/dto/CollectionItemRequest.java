@@ -1,10 +1,8 @@
-package com.example.personal_project.presentation;
+package com.example.personal_project.presentation.dto;
 
 import jakarta.validation.constraints.NotNull;
 
-public record CollectionItemDto(
-        Long id,
-
+public record CollectionItemRequest(
         @NotNull
         String name,
 

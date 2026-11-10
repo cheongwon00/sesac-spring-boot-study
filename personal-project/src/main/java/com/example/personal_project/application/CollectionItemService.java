@@ -1,9 +1,12 @@
 package com.example.personal_project.application;
 
-import com.example.personal_project.domain.CollectionItem;
+import com.example.personal_project.domain.entity.CollectionItem;
 import com.example.personal_project.domain.CollectionItemRepository;
-import com.example.personal_project.infrastructure.ListCollectionItemRepository;
-import com.example.personal_project.presentation.CollectionItemDto;
+import com.example.personal_project.domain.exception.CommonConflictException;
+import com.example.personal_project.presentation.dto.CollectionItemRequest;
+import com.example.personal_project.presentation.dto.CollectionItemResponse;
+import com.example.personal_project.presentation.dto.DummyJsonProduct;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -19,33 +22,39 @@ public class CollectionItemService {
         this.validationService = validationService;
     }
 
-    public CollectionItemDto add(CollectionItemDto collectionItemDto){
-        CollectionItem collectionItem = new CollectionItem(collectionItemDto.name().trim(),collectionItemDto.price());
+    public CollectionItemResponse internalAdd(CollectionItemRequest collectionItemRequest){
+        CollectionItem collectionItem = CollectionItem.createInternalItem(collectionItemRequest);
         validationService.checkValid(collectionItem);
         CollectionItem savedCollectionItem = collectionItemRepository.add(collectionItem);
-        CollectionItemDto savedCollectionItemDto = new CollectionItemDto(savedCollectionItem.getId(), savedCollectionItem.getName(), savedCollectionItem.getPrice());
-        return savedCollectionItemDto;
+        return CollectionItemResponse.form(savedCollectionItem);
     }
 
-    public List<CollectionItemDto> findAll(){
+    public CollectionItemResponse externalAdd(DummyJsonProduct externalItem){
+        if(collectionItemRepository.existsByExternalId(externalItem.id())){
+            throw new CommonConflictException("이미 추가한 외부 item입니다");
+        }
+        CollectionItem savedCollectionItem = collectionItemRepository.add(CollectionItem.createExternalItem(externalItem));
+        return CollectionItemResponse.form(savedCollectionItem);
+    }
+
+    public List<CollectionItemResponse> findAll(){
         List<CollectionItem> items = collectionItemRepository.findAll();
         return items.stream()
-                .map(item -> new CollectionItemDto(item.getId(),item.getName(),item.getPrice()))
+                .map(CollectionItemResponse::form)
                 .toList();
     }
 
-    public CollectionItemDto findItemById(Long id){
+    public CollectionItemResponse findItemById(Long id){
         CollectionItem findCollectionItem = collectionItemRepository.findById(id);
-        CollectionItemDto findCollectionItemDto = new CollectionItemDto(findCollectionItem.getId(), findCollectionItem.getName(), findCollectionItem.getPrice());
-        return findCollectionItemDto;
+        return CollectionItemResponse.form(findCollectionItem);
     }
 
-    public List<CollectionItemDto> findItemsWithBudget(Integer budget){
+    public List<CollectionItemResponse> findItemsWithBudget(Integer budget){
         return collectionItemRepository.findAll().stream()
                 .filter(item -> item.getPrice()<=budget)
                 .sorted(Comparator.comparingInt(CollectionItem::getPrice))
                 .limit(3)
-                .map(item -> new CollectionItemDto(item.getId(),item.getName(), item.getPrice()))
+                .map(CollectionItemResponse::form)
                 .toList();
     }
 }

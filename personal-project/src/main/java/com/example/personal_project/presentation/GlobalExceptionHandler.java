@@ -1,9 +1,11 @@
 package com.example.personal_project.presentation;
 
-import com.example.personal_project.domain.EntityNotFoundException;
+import com.example.personal_project.domain.exception.*;
+import com.example.personal_project.presentation.dto.ErrorMessage;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Path;
+import org.jspecify.annotations.NonNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -60,14 +61,43 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ErrorMessage> handleEntityNotFoundException(
-            EntityNotFoundException ex
+    @ExceptionHandler(CommonBadGateWayException.class)
+    public ResponseEntity<ErrorMessage> handleCommonBadGateWayException(
+            CommonBadGateWayException ex
     ){
-        List<String> list = new ArrayList<>();
-        list.add(ex.getMessage());
-        ErrorMessage errors = new ErrorMessage(list);
+        ErrorMessage errors = getErrors(ex.getMessage());
+        return new ResponseEntity(errors,HttpStatus.BAD_GATEWAY);
+    }
+
+    @ExceptionHandler(CommonBadRequestException.class)
+    public ResponseEntity<ErrorMessage> handleCommonBadRequestException(
+            CommonBadRequestException ex
+    ){
+        ErrorMessage errors = getErrors(ex.getMessage());
+        return new ResponseEntity(errors,HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CommonConflictException.class)
+    public ResponseEntity<ErrorMessage> handleCommonConflictException(
+            CommonConflictException ex
+    ){
+        ErrorMessage errors = getErrors(ex.getMessage());
+        return new ResponseEntity(errors,HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(CommonNotFoundException.class)
+    public ResponseEntity<ErrorMessage> handleCommonNotFoundException(
+            CommonNotFoundException ex
+    ){
+        ErrorMessage errors = getErrors(ex.getMessage());
         return new ResponseEntity(errors,HttpStatus.NOT_FOUND);
+    }
+
+    private ErrorMessage getErrors(String ex) {
+        List<String> list = new ArrayList<>();
+        list.add(ex);
+        ErrorMessage errors = new ErrorMessage(list);
+        return errors;
     }
 
     private String extractField(Path path){
