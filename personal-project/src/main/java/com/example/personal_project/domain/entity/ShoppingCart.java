@@ -1,0 +1,55 @@
+package com.example.personal_project.domain.entity;
+
+import com.example.personal_project.domain.exception.CommonConflictException;
+import com.example.personal_project.presentation.dto.ShoppingCartRequest;
+
+public class ShoppingCart {
+    public static final int MAX_CART_ITEM = 20;
+    private Long collectionItemId;
+    private String name;
+    private Integer unitPrice;
+    private Integer stock;
+    private ItemType itemType;
+    private Integer amount;
+
+    public static ShoppingCart createShoppingCart(CollectionItem collectionItem,ShoppingCartRequest shoppingCartRequest){
+        if(shoppingCartRequest.amount()<1 || shoppingCartRequest.amount()>5) throw new CommonConflictException("장바구니 수량은 1~5입니다");
+        if(!collectionItem.isInternalItem() && collectionItem.getStock() < shoppingCartRequest.amount()) throw new CommonConflictException("재고가 부족합니다");
+        return new ShoppingCart(
+                collectionItem.getId(),
+                collectionItem.getName(),
+                collectionItem.getPrice(),
+                collectionItem.getStock(),
+                collectionItem.getItemType(),
+                shoppingCartRequest.amount());
+    }
+
+    public ShoppingCart(Long collectionItemId, String name, Integer unitPrice, Integer stock, ItemType itemType, Integer amount) {
+        this.collectionItemId = collectionItemId;
+        this.name = name;
+        this.unitPrice = unitPrice;
+        this.stock = stock;
+        this.itemType = itemType;
+        this.amount = amount;
+    }
+
+    public Long getCollectionItemId() {
+        return collectionItemId;
+    }
+
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Integer getUnitPrice() {
+        return unitPrice;
+    }
+
+    public Integer getStock() {
+        return stock;
+    }
+}

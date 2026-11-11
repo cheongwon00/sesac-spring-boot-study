@@ -5,17 +5,14 @@ import com.example.personal_project.domain.exception.CommonBadRequestException;
 import com.example.personal_project.domain.exception.CommonNotFoundException;
 import com.example.personal_project.presentation.dto.DummyJsonProduct;
 import com.example.personal_project.presentation.dto.DummyJsonProductResponse;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestClientResponseException;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.net.http.HttpClient;
 import java.time.Duration;
-import java.util.List;
 
 @Component
 public class DummyJsonClient {

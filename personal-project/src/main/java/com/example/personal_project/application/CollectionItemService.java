@@ -33,7 +33,9 @@ public class CollectionItemService {
         if(collectionItemRepository.existsByExternalId(externalItem.id())){
             throw new CommonConflictException("이미 추가한 외부 item입니다");
         }
-        CollectionItem savedCollectionItem = collectionItemRepository.add(CollectionItem.createExternalItem(externalItem));
+        CollectionItem collectionItem = CollectionItem.createExternalItem(externalItem);
+        validationService.checkValid(collectionItem);
+        CollectionItem savedCollectionItem = collectionItemRepository.add(collectionItem);
         return CollectionItemResponse.form(savedCollectionItem);
     }
 

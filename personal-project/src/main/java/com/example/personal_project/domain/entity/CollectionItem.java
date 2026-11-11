@@ -16,13 +16,14 @@ enum ItemType{
 
 public class CollectionItem {
     private Long id;
-    @Size(min = 1,max = 20)
+    @Size(min = 1,max = 40,message = "상품 이름은 1~40글자입니다.")
     private String name;
 
-    @Min(0)
+    @Min(value = 0,message = "가격은 0이상입니다.")
     private Integer price;
 
     private ItemType itemType;
+
     private Long externalId;
     private Integer stock;
     public static final int EXCHANGE_RATE = 1_000;
@@ -78,5 +79,13 @@ public class CollectionItem {
 
     public Integer getPrice() {
         return price;
+    }
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public ItemType getItemType() {
+        return itemType;
     }
 }
