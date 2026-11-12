@@ -1,15 +1,15 @@
 package com.example.personal_project.presentation.controller;
 
 import com.example.personal_project.application.ShoppingCartService;
-import com.example.personal_project.presentation.dto.ShoppingCartRequest;
-import com.example.personal_project.presentation.dto.ShoppingCartResponse;
+import com.example.personal_project.presentation.dto.shoppingCart.ShoppingCartRequest;
+import com.example.personal_project.presentation.dto.shoppingCart.ShoppingCartResponse;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
+@RequestMapping("/shopping-cart")
 public class ShoppingCartController {
     private final ShoppingCartService shoppingCartService;
 
@@ -17,9 +17,23 @@ public class ShoppingCartController {
         this.shoppingCartService = shoppingCartService;
     }
 
-    @PostMapping("/shopping-cart")
+    @PostMapping()
     public ShoppingCartResponse addCart(@Valid @RequestBody ShoppingCartRequest shoppingCartRequest){
         return shoppingCartService.addCart(shoppingCartRequest);
     }
 
+    @PatchMapping()
+    public ShoppingCartResponse editCart(@Valid @RequestBody ShoppingCartRequest shoppingCartRequest){
+        return shoppingCartService.editCart(shoppingCartRequest);
+    }
+
+    @GetMapping()
+    public List<ShoppingCartResponse> getAllCart(){
+        return shoppingCartService.findAll();
+    }
+
+    @DeleteMapping("/{collectionItemId}")
+    public void deleteCart(@PathVariable Long collectionItemId){
+        shoppingCartService.delete(collectionItemId);
+    }
 }

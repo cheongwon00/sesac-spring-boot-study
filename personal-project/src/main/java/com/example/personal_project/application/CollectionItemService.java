@@ -3,10 +3,9 @@ package com.example.personal_project.application;
 import com.example.personal_project.domain.entity.CollectionItem;
 import com.example.personal_project.domain.CollectionItemRepository;
 import com.example.personal_project.domain.exception.CommonConflictException;
-import com.example.personal_project.presentation.dto.CollectionItemRequest;
-import com.example.personal_project.presentation.dto.CollectionItemResponse;
-import com.example.personal_project.presentation.dto.DummyJsonProduct;
-import org.springframework.http.HttpStatus;
+import com.example.personal_project.presentation.dto.collectionItem.CollectionItemRequest;
+import com.example.personal_project.presentation.dto.collectionItem.CollectionItemResponse;
+import com.example.personal_project.presentation.dto.dummyJsonProduct.DummyJsonProduct;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;

@@ -1,4 +1,4 @@
-package com.example.personal_project.presentation.dto;
+package com.example.personal_project.presentation.dto.dummyJsonProduct;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

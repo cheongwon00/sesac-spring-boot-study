@@ -1,8 +1,7 @@
 package com.example.personal_project.domain.entity;
 
-import com.example.personal_project.presentation.dto.CollectionItemRequest;
-import com.example.personal_project.presentation.dto.CollectionItemResponse;
-import com.example.personal_project.presentation.dto.DummyJsonProduct;
+import com.example.personal_project.presentation.dto.collectionItem.CollectionItemRequest;
+import com.example.personal_project.presentation.dto.dummyJsonProduct.DummyJsonProduct;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 

@@ -2,8 +2,8 @@ package com.example.personal_project.presentation.controller;
 
 import com.example.personal_project.application.CollectionItemService;
 import com.example.personal_project.infrastructure.DummyJsonClient;
-import com.example.personal_project.presentation.dto.CollectionItemRequest;
-import com.example.personal_project.presentation.dto.CollectionItemResponse;
+import com.example.personal_project.presentation.dto.collectionItem.CollectionItemRequest;
+import com.example.personal_project.presentation.dto.collectionItem.CollectionItemResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import org.springframework.web.bind.annotation.*;

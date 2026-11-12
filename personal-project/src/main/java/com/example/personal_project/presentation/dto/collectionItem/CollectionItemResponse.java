@@ -1,4 +1,4 @@
-package com.example.personal_project.presentation.dto;
+package com.example.personal_project.presentation.dto.collectionItem;
 
 import com.example.personal_project.domain.entity.CollectionItem;
 

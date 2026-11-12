@@ -1,7 +1,7 @@
 package com.example.personal_project.presentation.controller;
 
 import com.example.personal_project.infrastructure.DummyJsonClient;
-import com.example.personal_project.presentation.dto.DummyJsonProductResponse;
+import com.example.personal_project.presentation.dto.dummyJsonProduct.DummyJsonProductResponse;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

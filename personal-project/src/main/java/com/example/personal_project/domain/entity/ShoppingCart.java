@@ -1,7 +1,9 @@
 package com.example.personal_project.domain.entity;
 
 import com.example.personal_project.domain.exception.CommonConflictException;
-import com.example.personal_project.presentation.dto.ShoppingCartRequest;
+import com.example.personal_project.presentation.dto.shoppingCart.ShoppingCartRequest;
+
+import java.util.Objects;
 
 public class ShoppingCart {
     public static final int MAX_CART_ITEM = 20;
@@ -31,6 +33,17 @@ public class ShoppingCart {
         this.stock = stock;
         this.itemType = itemType;
         this.amount = amount;
+    }
+
+    public Boolean sameCollectionItemId(Long collectionItemId){
+        return this.collectionItemId.equals(collectionItemId);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        ShoppingCart that = (ShoppingCart) o;
+        return Objects.equals(collectionItemId, that.collectionItemId);
     }
 
     public Long getCollectionItemId() {
