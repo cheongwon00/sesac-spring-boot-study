@@ -17,15 +17,10 @@ public class SubtotalService {
 
     public SubtotalResponse getSubtotal(SubtotalRequest subtotalRequest){
         CouponCode couponCode = CouponCode.createCouponCode(subtotalRequest.couponCode());
-        Integer shipping = couponCode.getShipping();
-
-        Long subtotal = shoppingCartRepository.findAll().stream()
-                .mapToLong(item -> (long) item.getUnitPrice() * item.getAmount())
-                .sum();
-
+        Long subtotal = CouponCode.calcSubtotal(shoppingCartRepository.findAll());
         Long discount = couponCode.discount(subtotal);
         Long discountedSubtotal = subtotal - discount;
-        if(discountedSubtotal>=CouponCode.MIN_COST) shipping=0;
+        Integer shipping = couponCode.getShipping(discountedSubtotal);
         Long finalPrice = discountedSubtotal + shipping;
         String coupon = subtotalRequest.couponCode();
 
