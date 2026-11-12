@@ -1,7 +1,7 @@
 package com.example.personal_project.infrastructure;
 
 import com.example.personal_project.domain.entity.CollectionItem;
-import com.example.personal_project.domain.CollectionItemRepository;
+import com.example.personal_project.domain.repository.CollectionItemRepository;
 import com.example.personal_project.domain.exception.CommonNotFoundException;
 import org.springframework.stereotype.Repository;
 

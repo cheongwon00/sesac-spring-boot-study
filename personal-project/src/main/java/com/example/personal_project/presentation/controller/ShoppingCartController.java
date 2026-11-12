@@ -3,6 +3,8 @@ package com.example.personal_project.presentation.controller;
 import com.example.personal_project.application.ShoppingCartService;
 import com.example.personal_project.presentation.dto.shoppingCart.ShoppingCartRequest;
 import com.example.personal_project.presentation.dto.shoppingCart.ShoppingCartResponse;
+import com.example.personal_project.presentation.dto.shoppingCart.SubtotalRequest;
+import com.example.personal_project.presentation.dto.shoppingCart.SubtotalResponse;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 

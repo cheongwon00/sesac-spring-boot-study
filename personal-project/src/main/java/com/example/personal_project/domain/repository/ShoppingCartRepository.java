@@ -1,4 +1,4 @@
-package com.example.personal_project.domain;
+package com.example.personal_project.domain.repository;
 
 import com.example.personal_project.domain.entity.ShoppingCart;
 

@@ -1,7 +1,7 @@
 package com.example.personal_project.application;
 
-import com.example.personal_project.domain.CollectionItemRepository;
-import com.example.personal_project.domain.ShoppingCartRepository;
+import com.example.personal_project.domain.repository.CollectionItemRepository;
+import com.example.personal_project.domain.repository.ShoppingCartRepository;
 import com.example.personal_project.domain.entity.CollectionItem;
 import com.example.personal_project.domain.entity.ShoppingCart;
 import com.example.personal_project.domain.exception.CommonConflictException;
@@ -50,4 +50,5 @@ public class ShoppingCartService {
     public void delete(Long collectionItemId){
         shoppingCartRepository.delete(collectionItemId);
     }
+
 }

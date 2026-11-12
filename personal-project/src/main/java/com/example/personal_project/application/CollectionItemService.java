@@ -1,7 +1,7 @@
 package com.example.personal_project.application;
 
 import com.example.personal_project.domain.entity.CollectionItem;
-import com.example.personal_project.domain.CollectionItemRepository;
+import com.example.personal_project.domain.repository.CollectionItemRepository;
 import com.example.personal_project.domain.exception.CommonConflictException;
 import com.example.personal_project.presentation.dto.collectionItem.CollectionItemRequest;
 import com.example.personal_project.presentation.dto.collectionItem.CollectionItemResponse;
