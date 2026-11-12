@@ -16,19 +16,8 @@ public class SubtotalService {
     }
 
     public SubtotalResponse getSubtotal(SubtotalRequest subtotalRequest){
-        CouponCode couponCode;
-        Integer shipping;
-        if(subtotalRequest.couponCode() == null){
-            couponCode = CouponCode.NONE;
-            shipping = 0;
-        }else if(subtotalRequest.couponCode().equals("PERCENT10")){
-            couponCode = CouponCode.PERCENT10;
-            shipping = CouponCode.SHIPPING_FEE;
-        }else if(subtotalRequest.couponCode().equals("FIXED15000")){
-            couponCode = CouponCode.FIXED15000;
-            shipping = CouponCode.SHIPPING_FEE;
-        }else
-            throw new CommonBadRequestException("존재하지 않는 쿠폰입니다");
+        CouponCode couponCode = CouponCode.createCouponCode(subtotalRequest.couponCode());
+        Integer shipping = couponCode.getShipping();
 
         Long subtotal = shoppingCartRepository.findAll().stream()
                 .mapToLong(item -> (long) item.getUnitPrice() * item.getAmount())
