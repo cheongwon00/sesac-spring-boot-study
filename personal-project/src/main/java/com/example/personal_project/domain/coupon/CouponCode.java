@@ -19,10 +19,12 @@ public enum CouponCode {
     }
 
     public static CouponCode createCouponCode(String code){
-        if(code == null) return NONE;
-        else if(code.equals("PERCENT10")) return PERCENT10;
-        else if(code.equals("FIXED15000")) return FIXED15000;
-        else throw new CommonBadRequestException("존재하지 않는 쿠폰입니다");
+        if(code == null) code="NONE";
+        try {
+            return CouponCode.valueOf(code);
+        }catch (IllegalArgumentException e){
+            throw new CommonBadRequestException("존재하지 않는 쿠폰입니다");
+        }
     }
 
     public Integer getShipping(Long discountedSubtotal){

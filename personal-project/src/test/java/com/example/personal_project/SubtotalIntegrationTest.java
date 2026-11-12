@@ -90,7 +90,7 @@ class SubtotalIntegrationTest extends ApiIntegrationTestSupport {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"", "NONE", "percent10", "UNKNOWN", " PERCENT10 "})
+    @ValueSource(strings = {"", "percent10", "UNKNOWN", " PERCENT10 "})
     @DisplayName("정의되지 않은 쿠폰 코드는 400이다")
     void rejectUnknownCoupon(String coupon) throws Exception {
         mockMvc.perform(get("/shopping-cart/subtotal").contentType(MediaType.APPLICATION_JSON)
