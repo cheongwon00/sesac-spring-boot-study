@@ -5,6 +5,7 @@ import com.example.personal_project.domain.repository.CollectionItemRepository;
 import com.example.personal_project.domain.exception.CommonNotFoundException;
 import org.springframework.stereotype.Repository;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -36,5 +37,13 @@ public class ListCollectionItemRepository implements CollectionItemRepository {
         return collectionItems.stream()
                 .anyMatch(item ->
                         Objects.equals(item.getExternalId(), externalId));
+    }
+
+    public List<CollectionItem> findItemsWithBudget(Integer budget, Integer limit){
+        return collectionItems.stream()
+                .filter(item -> item.getPrice()<=budget)
+                .sorted(Comparator.comparingInt(CollectionItem::getPrice))
+                .limit(limit)
+                .toList();
     }
 }

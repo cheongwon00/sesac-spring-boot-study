@@ -8,11 +8,6 @@ import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-enum ItemType{
-    INTERNAL,
-    EXTERNAL
-}
-
 public class CollectionItem {
     private Long id;
     @Size(min = 1,max = 40,message = "상품 이름은 1~40글자입니다.")
@@ -26,6 +21,10 @@ public class CollectionItem {
     private Long externalId;
     private Integer stock;
     public static final int EXCHANGE_RATE = 1_000;
+    public static final int RECOMMEND_NUM = 3;
+
+    public CollectionItem() {
+    }
 
     public CollectionItem(String name, Integer price, ItemType itemType) {
         this.name = name;
@@ -84,7 +83,30 @@ public class CollectionItem {
         return stock;
     }
 
-    public ItemType getItemType() {
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public void setItemType(ItemType itemType) {
+        this.itemType = itemType;
+    }
+
+    public void setExternalId(Long externalId) {
+        this.externalId = externalId;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
+
+    public String getItemType() {
+        return itemType.name();
+    }
+    public ItemType getEnumItemType(){
         return itemType;
     }
 }

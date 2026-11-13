@@ -9,4 +9,5 @@ public interface CollectionItemRepository {
     List<CollectionItem> findAll();
     CollectionItem findById(Long id);
     Boolean existsByExternalId(Long externalId);
+    List<CollectionItem> findItemsWithBudget(Integer budget, Integer limit);
 }

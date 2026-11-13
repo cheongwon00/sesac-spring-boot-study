@@ -51,10 +51,7 @@ public class CollectionItemService {
     }
 
     public List<CollectionItemResponse> findItemsWithBudget(Integer budget){
-        return collectionItemRepository.findAll().stream()
-                .filter(item -> item.getPrice()<=budget)
-                .sorted(Comparator.comparingInt(CollectionItem::getPrice))
-                .limit(3)
+        return collectionItemRepository.findItemsWithBudget(budget,CollectionItem.RECOMMEND_NUM).stream()
                 .map(CollectionItemResponse::form)
                 .toList();
     }

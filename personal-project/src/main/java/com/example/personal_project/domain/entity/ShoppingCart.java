@@ -22,8 +22,11 @@ public class ShoppingCart {
                 collectionItem.getName(),
                 collectionItem.getPrice(),
                 collectionItem.getStock(),
-                collectionItem.getItemType(),
+                collectionItem.getEnumItemType(),
                 shoppingCartRequest.amount());
+    }
+
+    public ShoppingCart() {
     }
 
     public ShoppingCart(Long collectionItemId, String name, Integer unitPrice, Integer stock, ItemType itemType, Integer amount) {
@@ -64,5 +67,33 @@ public class ShoppingCart {
 
     public Integer getStock() {
         return stock;
+    }
+
+    public String getItemType() {
+        return itemType.name();
+    }
+
+    public void setCollectionItemId(Long collectionItemId) {
+        this.collectionItemId = collectionItemId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setUnitPrice(Integer unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
+
+    public void setItemType(String itemType) {
+        this.itemType = ItemType.valueOf(itemType);
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
     }
 }
