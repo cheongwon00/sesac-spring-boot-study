@@ -1,24 +1,24 @@
 # Personal Project
 
-내부 상품을 직접 등록하거나 외부 상품을 가져와 상품 목록을 구성하고, 장바구니 수량과 쿠폰에 따른 결제 예상 금액을 계산하는 Spring Boot REST API 프로젝트입니다.
+## 테이블 구조
 
-이 문서는 현재 구현을 기준으로 API의 요청·응답·오류 계약과 클래스별 책임을 설명합니다.
+### collection_items 스키마
+<img src="./images/collection_items_schema.png" width="500">
 
-## 실행 환경
+### shopping_carts 스키마
+<img src="./images/shopping_carts_schema.png" width="500">
 
-- Java 21
-- Spring Boot 4.1.2 / Spring MVC
-- Jakarta Bean Validation
-- Gradle Wrapper
-- 메모리 기반 저장소(`CopyOnWriteArrayList`)
+### 예산별 추천 아이템(예산 동률일 시 등록순서 보존 방법)
+<img src="./images/recommend.png" width="500">
 
-```bash
-./gradlew bootRun
-```
+ORDER BY price ASC와 limit으로만 제한을 했을 경우에는
+기존 등록 순서가 보장되지 않지만, id ASC를 넣어주어서
+2차 정렬 기준을 정해주었습니다.
 
-기본 주소는 `http://localhost:8080`입니다. 별도 데이터베이스 설정은 필요하지 않으며, 서버를 재시작하면 상품과 장바구니 데이터가 초기화됩니다. 사용자 구분 없이 하나의 상품 목록과 장바구니를 공유합니다.
+## 여러 쓰기
 
-서버 실행 후 기본 주소에 접속하면 `src/main/resources/static/index.html`의 프론트 화면을 사용할 수 있습니다. 상품 등록·단건 조회·예산 추천, 외부 상품 검색·등록, 장바구니 수량 변경·삭제, 쿠폰별 결제 예상 금액 조회를 지원합니다.
+하나의 요청에서 두 곳 이상 쓰기를 하는 부분이 없으므로,
+따로 트랜잭션이 필요하지 않다고 판단하였습니다.
 
 ## API 계약
 
