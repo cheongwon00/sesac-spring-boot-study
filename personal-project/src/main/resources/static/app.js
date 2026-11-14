@@ -74,7 +74,8 @@ function mutationButton(label, className, disabled = false) {
 
 function updateControls() {
   document.querySelectorAll('[data-mutation]').forEach((button) => {
-    button.disabled = state.mutating || state.cartLoading || button.dataset.disabled === 'true';
+    button.disabled = !button.hasAttribute('data-keep-enabled')
+      && (state.mutating || state.cartLoading || button.dataset.disabled === 'true');
   });
   $('#coupon').disabled = state.mutating || state.cartLoading || !state.cartLoaded;
   $('#refresh-cart').disabled = state.mutating || state.cartLoading;
@@ -161,18 +162,14 @@ function productCard(item, external) {
     }));
     actions.append(button);
   } else {
-    const inCart = state.cart.some((line) => line.collectionItemId === item.id);
-    const maximum = item.stock === null ? 5 : Math.min(5, item.stock);
     const select = element('select', 'quantity-select');
     select.setAttribute('aria-label', `${name} 담을 수량`);
-    for (let amount = 1; amount <= Math.max(1, maximum); amount++) {
+    for (let amount = 1; amount <= 5; amount++) {
       const option = element('option', '', `${amount}개`);
       option.value = amount;
       select.append(option);
     }
-    select.disabled = inCart || maximum === 0;
-    const button = mutationButton(maximum === 0 ? '품절' : inCart ? '담은 상품 ✓' : '담기 ＋', `card-add${inCart ? ' in-cart' : ''}`,
-      inCart || maximum === 0 || !state.cartLoaded);
+    const button = $('#cart-add-button').content.firstElementChild.cloneNode(true);
     button.setAttribute('aria-label', `${name} 장바구니에 담기`);
     button.addEventListener('click', () => mutate(async () => {
       await request('/shopping-cart', { method: 'POST', body: { collectionItemId: item.id, amount: Number(select.value) } });
@@ -339,7 +336,7 @@ async function calculateSummary() {
   $('#coupon-description').textContent = couponCode === 'PERCENT10'
     ? '상품 금액의 10% 할인 · 최대 20,000원 · 0원 초과 시 사용 가능'
     : couponCode === 'FIXED15000' ? '상품 금액 100,000원 이상일 때 15,000원 할인'
-      : '쿠폰을 사용하지 않으면 배송비가 무료예요.';
+      : '쿠폰 없이 상품 금액을 기준으로 배송비를 계산해요.';
   try {
     const data = await request('/shopping-cart/subtotal', { method: 'POST', body: { couponCode } });
     if (sequence !== state.sequence.summary) return;
@@ -365,7 +362,7 @@ $('#add-form').addEventListener('submit', (event) => {
   event.preventDefault();
   mutate(async () => {
     showError('#add-error');
-    const name = $('#name').value;
+    const name = $('#name').value.trim();
     if (name.length < 1 || name.length > 40) throw new Error('상품 이름은 1~40자로 입력해 주세요.');
     const price = integer($('#price'));
     await request('/item', { method: 'POST', body: { name, price } });

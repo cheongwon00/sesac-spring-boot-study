@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#284b3d">
   <title>모아 — 취향을 모으는 장바구니</title>
   <link rel="stylesheet" href="/style.css">
-  <script src="/app.js" defer></script>
+  <script src="/app.js?v=20261114-6" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#collection">본문 바로가기</a>
@@ -47,10 +47,10 @@
         <div id="cart-error" class="inline-error" role="alert" hidden></div>
         <div id="cart-items" class="cart-items" aria-live="polite" aria-busy="true"><p class="loading">장바구니를 불러오고 있어요…</p></div>
         <button id="refresh-cart" class="text-button cart-refresh" type="button">장바구니 새로고침 ↻</button>
-        <div class="coupon-section"><label for="coupon">작은 혜택, 쿠폰 <span>선택</span></label><select id="coupon"><option value="">쿠폰 사용 안 함</option><option value="PERCENT10">10% 할인 · 최대 20,000원</option><option value="FIXED15000">15,000원 할인 · 10만원 이상</option></select><p id="coupon-description" class="hint">쿠폰을 사용하지 않으면 배송비가 무료예요.</p></div>
+        <div class="coupon-section"><label for="coupon">작은 혜택, 쿠폰 <span>선택</span></label><select id="coupon"><option value="">쿠폰 사용 안 함</option><option value="PERCENT10">10% 할인 · 최대 20,000원</option><option value="FIXED15000">15,000원 할인 · 10만원 이상</option></select><p id="coupon-description" class="hint">쿠폰 없이 상품 금액을 기준으로 배송비를 계산해요.</p></div>
         <div id="summary-error" class="inline-error" role="alert" hidden></div>
         <div id="summary" aria-live="polite" aria-busy="true"><dl class="summary-lines"><div><dt>상품 금액</dt><dd id="subtotal">—</dd></div><div class="discount-line"><dt>쿠폰 할인</dt><dd id="discount">—</dd></div><div><dt>배송비</dt><dd id="shipping">—</dd></div></dl><div class="total-line"><span>결제 예상 금액</span><strong id="final-price">—</strong></div></div>
-        <p class="shipping-note">쿠폰 적용 후 100,000원 이상이면 무료 배송<br>그 미만은 배송비 5,000원 (쿠폰 사용 시)</p>
+        <p class="shipping-note">쿠폰 적용 후 100,000원 이상이면 무료 배송<br>0원 초과~100,000원 미만은 배송비 5,000원</p>
         <div class="cart-note"><span aria-hidden="true">ⓘ</span><p>상품별 1~5개, 최대 20종을 담을 수 있어요.<br>예상 금액을 확인하는 화면으로, 결제는 진행되지 않아요.</p></div>
       </aside>
     </div>
@@ -58,7 +58,10 @@
   </main>
   <footer><a class="brand" href="/">모아<span class="brand-dot">.</span></a><p>작은 취향이 모여, 나다운 컬렉션.</p><span>MADE FOR YOUR LITTLE FINDS</span></footer>
 
-  <dialog id="add-dialog" aria-labelledby="add-title"><div class="dialog-heading"><p class="eyebrow">ADD TO YOUR COLLECTION</p><button id="close-add" class="icon-button" type="button" aria-label="상품 등록 닫기">×</button></div><h2 id="add-title">새로운 취향 하나</h2><p class="description">눈여겨본 상품을 컬렉션에 기록해 보세요.</p><form id="add-form"><label for="name">상품 이름</label><input id="name" name="name" required minlength="1" maxlength="40" placeholder="예: 기계식 키보드" autocomplete="off"><p class="hint">1~40자 · 입력한 공백도 그대로 저장돼요.</p><label for="price">가격</label><div class="input-unit"><input id="price" name="price" type="number" min="0" max="2147483647" step="1" required placeholder="0"><span>원</span></div><div id="add-error" class="inline-error" role="alert" hidden></div><button id="add-submit" class="primary" type="submit">컬렉션에 추가 <span aria-hidden="true">↗</span></button></form></dialog>
+  <dialog id="add-dialog" aria-labelledby="add-title"><div class="dialog-heading"><p class="eyebrow">ADD TO YOUR COLLECTION</p><button id="close-add" class="icon-button" type="button" aria-label="상품 등록 닫기">×</button></div><h2 id="add-title">새로운 취향 하나</h2><p class="description">눈여겨본 상품을 컬렉션에 기록해 보세요.</p><form id="add-form"><label for="name">상품 이름</label><input id="name" name="name" required minlength="1" maxlength="40" placeholder="예: 기계식 키보드" autocomplete="off"><p class="hint">1~40자 · 앞뒤 공백은 제거하며 공백만 입력할 수 없어요.</p><label for="price">가격</label><div class="input-unit"><input id="price" name="price" type="number" min="0" max="2147483647" step="1" required placeholder="0"><span>원</span></div><div id="add-error" class="inline-error" role="alert" hidden></div><button id="add-submit" class="primary" type="submit">컬렉션에 추가 <span aria-hidden="true">↗</span></button></form></dialog>
+  <template id="cart-add-button">
+    <button type="button" class="card-add" data-mutation data-keep-enabled>담기 ＋</button>
+  </template>
   <div id="feedback" class="toast" role="status" aria-live="polite" hidden></div>
 </body>
 </html>

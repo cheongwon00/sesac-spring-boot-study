@@ -28,7 +28,7 @@ public enum CouponCode {
     }
 
     public Integer getShipping(Long discountedSubtotal){
-        if(this == NONE) return 0;
+        if(discountedSubtotal == 0) return 0;
         if(discountedSubtotal>=MIN_COST) return 0;
         return SHIPPING_FEE;
     }

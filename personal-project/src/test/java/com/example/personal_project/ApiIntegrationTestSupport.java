@@ -16,9 +16,9 @@ import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestClient;
 
-@SpringBootTest
+@SpringBootTest(properties = "spring.main.allow-bean-definition-overriding=true")
 @AutoConfigureMockMvc
-@Import(ApiIntegrationTestSupport.ExternalApiTestConfig.class)
+@Import({ApiIntegrationTestSupport.ExternalApiTestConfig.class, InMemoryRepositoryTestConfig.class})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 abstract class ApiIntegrationTestSupport {
     @Autowired protected MockMvc mockMvc;

@@ -48,7 +48,7 @@ class SubtotalIntegrationTest extends ApiIntegrationTestSupport {
     }
 
     @Test
-    @DisplayName("쿠폰 미사용이면 여러 상품의 단가와 수량을 합산하고 배송비는 0이다")
+    @DisplayName("쿠폰 미사용도 합계가 33,000원이면 배송비 5,000원을 부과한다")
     void sumLinesWithoutCoupon() throws Exception {
         addLine(12000, 2);
         addLine(3000, 3);
@@ -57,12 +57,15 @@ class SubtotalIntegrationTest extends ApiIntegrationTestSupport {
                 .andExpect(jsonPath("$.subtotal").value(33000))
                 .andExpect(jsonPath("$.discount").value(0))
                 .andExpect(jsonPath("$.discountedSubtotal").value(33000))
-                .andExpect(jsonPath("$.shipping").value(0))
-                .andExpect(jsonPath("$.finalPrice").value(33000));
+                .andExpect(jsonPath("$.shipping").value(5000))
+                .andExpect(jsonPath("$.finalPrice").value(38000));
     }
 
     @ParameterizedTest
     @CsvSource({
+            "NONE,      0,      0,     0,      0,    0",
+            "NONE,      99999,  0,     99999,  5000, 104999",
+            "NONE,      100000, 0,     100000, 0,    100000",
             "PERCENT10, 1,      0,     1,      5000, 5001",
             "PERCENT10, 999,    99,    900,    5000, 5900",
             "PERCENT10, 100000, 10000, 90000,  5000, 95000",

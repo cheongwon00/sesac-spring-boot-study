@@ -63,7 +63,7 @@ ORDER BY price ASC와 limit으로만 제한을 했을 경우에는
 | `name` | string | O | null 불가, 길이 1~40자 |
 | `price` | integer | O | null 불가, 0 이상 |
 
-이름의 앞뒤 공백을 제거하거나 공백만 있는 이름을 별도로 거부하는 처리는 현재 없습니다. 길이 조건을 충족하는 공백 문자열도 등록될 수 있습니다.
+이름의 앞뒤 공백을 제거한 후 1~40자 길이를 검증합니다. 공백만 있는 이름은 등록할 수 없습니다.
 
 응답 예시:
 
@@ -150,7 +150,7 @@ GET /external-item/search?q=phone&limit=10&skip=0
 | `amount` | integer | O | 1~5 |
 
 - 존재하지 않는 내부 상품 ID이면 404를 반환합니다.
-- 이미 장바구니에 있는 상품을 다시 추가하면 수량을 누적하지 않고 409를 반환합니다.
+- 이미 장바구니에 있는 상품을 다시 추가하면 기존 수량에 합산합니다. 합산 수량이 5개 또는 재고를 초과하면 409를 반환하며 기존 수량을 유지합니다.
 - 서로 다른 상품을 최대 20개까지 담을 수 있으며, 한도를 초과하는 추가 요청은 409입니다.
 - 수량 범위 위반 또는 외부 상품 재고 부족은 409입니다. 필수 필드 누락은 400입니다.
 - 장바구니에 담거나 수량을 변경해도 상품 재고를 차감하거나 예약하지 않습니다.
@@ -188,18 +188,18 @@ curl -X POST 'http://localhost:8080/shopping-cart/subtotal' \
 
 | `couponCode` | 적용 조건 | 할인 금액 |
 | --- | --- | --- |
-| 생략 또는 `null` | 제한 없음 | 0원 |
+| 생략, `null` 또는 `NONE` | 제한 없음 | 0원 |
 | `PERCENT10` | 상품 합계가 0원 초과 | 합계의 10%, 소수점 이하 버림, 최대 20,000원 |
 | `FIXED15000` | 상품 합계가 100,000원 이상 | 15,000원 |
 
-코드는 대소문자를 구분하며, 빈 문자열이나 `"NONE"`을 포함한 나머지 문자열은 400을 반환합니다. 쿠폰 사용 조건을 충족하지 못한 경우도 400입니다.
+코드는 대소문자를 구분하며, 빈 문자열을 포함한 정의되지 않은 문자열은 400을 반환합니다. 쿠폰 사용 조건을 충족하지 못한 경우도 400입니다.
 
 계산 순서는 다음과 같습니다.
 
 1. `subtotal`: 장바구니의 `unitPrice × amount` 합계
 2. `discount`: 선택한 쿠폰의 할인액
 3. `discountedSubtotal`: `subtotal - discount`
-4. `shipping`: 쿠폰 미사용 시 0원, 쿠폰 사용 시 기본 5,000원. 할인 후 금액이 100,000원 이상이면 0원
+4. `shipping`: 쿠폰 사용 여부와 관계없이 기본 5,000원. 할인 후 금액이 0원이거나 100,000원 이상이면 0원
 5. `finalPrice`: `discountedSubtotal + shipping`
 
 상품 합계 100,000원에 `PERCENT10`을 적용한 응답 예시:
@@ -224,7 +224,7 @@ curl -X POST 'http://localhost:8080/shopping-cart/subtotal' \
 ```json
 {
   "errors": [
-    "이미 장바구니에 해당 상품이 있습니다"
+    "장바구니 수량은 1~5입니다"
   ]
 }
 ```
@@ -333,7 +333,7 @@ SubtotalController → SubtotalService → ShoppingCartRepository 전체 조회
 
 | 테스트 클래스 | 검증 범위 |
 | --- | --- |
-| `CollectionItemIntegrationTest` | 상품 등록·조회·추천, 필수 입력과 이름·가격·예산 경계값, 현재 공백 보존 동작 |
+| `CollectionItemIntegrationTest` | 상품 등록·조회·추천, 필수 입력과 이름·가격·예산 경계값, 앞뒤 공백 제거·공백 이름 거부 |
 | `ShoppingCartIntegrationTest` | 추가·조회·수량 교체·삭제, 중복·필수 입력·수량·최대 20개 제한, 실패 시 기존 상태 유지 |
 | `SubtotalIntegrationTest` | 상품 합산, 쿠폰 조건·할인 한도·소수점 버림, 할인 후 무료 배송 경계값, 잘못된 쿠폰, 큰 금액 계산 |
 | `ExternalItemIntegrationTest` | 외부 목록·검색 파라미터, 상품 등록·가격 환산·중복·재고 검증, 외부 오류의 HTTP 상태 변환 |

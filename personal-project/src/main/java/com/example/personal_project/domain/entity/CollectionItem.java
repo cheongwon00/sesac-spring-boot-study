@@ -45,7 +45,7 @@ public class CollectionItem {
     }
 
     public static CollectionItem createInternalItem(CollectionItemRequest dto){
-        return new CollectionItem(dto.name(), dto.price(), ItemType.INTERNAL);
+        return new CollectionItem(dto.name().trim(), dto.price(), ItemType.INTERNAL);
     }
 
     public static CollectionItem createExternalItem(DummyJsonProduct dto){

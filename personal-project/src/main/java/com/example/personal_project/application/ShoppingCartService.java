@@ -4,7 +4,6 @@ import com.example.personal_project.domain.repository.CollectionItemRepository;
 import com.example.personal_project.domain.repository.ShoppingCartRepository;
 import com.example.personal_project.domain.entity.CollectionItem;
 import com.example.personal_project.domain.entity.ShoppingCart;
-import com.example.personal_project.domain.exception.CommonConflictException;
 import com.example.personal_project.domain.exception.CommonNotFoundException;
 import com.example.personal_project.presentation.dto.shoppingCart.ShoppingCartRequest;
 import com.example.personal_project.presentation.dto.shoppingCart.ShoppingCartResponse;
@@ -24,9 +23,13 @@ public class ShoppingCartService {
 
     public ShoppingCartResponse addCart(ShoppingCartRequest shoppingCartRequest){
         CollectionItem collectionItem = collectionItemRepository.findById(shoppingCartRequest.collectionItemId());
-        if(shoppingCartRepository.existByCollectionItemId(collectionItem.getId()))
-            throw new CommonConflictException("이미 장바구니에 해당 상품이 있습니다");
-        ShoppingCart shoppingCart= ShoppingCart.createShoppingCart(collectionItem,shoppingCartRequest);
+        ShoppingCart shoppingCart = ShoppingCart.createShoppingCart(collectionItem, shoppingCartRequest);
+        if(shoppingCartRepository.existByCollectionItemId(collectionItem.getId())){
+            ShoppingCart existingCart = shoppingCartRepository.findByCollectionItemId(collectionItem.getId());
+            Integer prevAmount = existingCart.getAmount();
+            ShoppingCartRequest reviseRequest = new ShoppingCartRequest(collectionItem.getId(), prevAmount+shoppingCartRequest.amount());
+            return editCart(reviseRequest);
+        }
         ShoppingCart createdShoppingCart = shoppingCartRepository.add(shoppingCart);
         return ShoppingCartResponse.form(createdShoppingCart);
     }

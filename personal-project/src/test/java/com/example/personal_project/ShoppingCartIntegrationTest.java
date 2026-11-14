@@ -37,14 +37,16 @@ class ShoppingCartIntegrationTest extends ApiIntegrationTestSupport {
     }
 
     @Test
-    @DisplayName("중복 추가는 409이며 기존 수량을 유지한다")
-    void rejectDuplicate() throws Exception {
+    @DisplayName("동일 상품을 다시 담으면 한 항목에 수량을 합산한다")
+    void mergeDuplicate() throws Exception {
         long id = createItem(1000);
         add(id, 1).andExpect(status().isOk());
-        add(id, 3).andExpect(status().isConflict())
-                .andExpect(jsonPath("$.errors[0]").value("이미 장바구니에 해당 상품이 있습니다"));
+        add(id, 3).andExpect(status().isOk())
+                .andExpect(jsonPath("$.amount").value(4));
         mockMvc.perform(get("/shopping-cart")).andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].amount").value(1));
+                .andExpect(jsonPath("$[0].amount").value(4));
+        add(id, 2).andExpect(status().isConflict());
+        mockMvc.perform(get("/shopping-cart")).andExpect(jsonPath("$[0].amount").value(4));
     }
 
     @ParameterizedTest
@@ -54,9 +56,10 @@ class ShoppingCartIntegrationTest extends ApiIntegrationTestSupport {
         long id = createItem(1000);
         add(id, amount).andExpect(status().isConflict())
                 .andExpect(jsonPath("$.errors[0]").value("장바구니 수량은 1~5입니다"));
-        add(id, 1).andExpect(status().isOk());
+        add(id, 2).andExpect(status().isOk());
+        add(id, amount).andExpect(status().isConflict());
         edit(id, amount).andExpect(status().isConflict());
-        mockMvc.perform(get("/shopping-cart")).andExpect(jsonPath("$[0].amount").value(1));
+        mockMvc.perform(get("/shopping-cart")).andExpect(jsonPath("$[0].amount").value(2));
     }
 
     @ParameterizedTest

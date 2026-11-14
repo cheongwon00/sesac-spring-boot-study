@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -18,7 +19,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
+@SpringBootTest(properties = "spring.main.allow-bean-definition-overriding=true")
+@Import(InMemoryRepositoryTestConfig.class)
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class CollectionItemIntegrationTest {
@@ -37,12 +39,12 @@ class CollectionItemIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.name").value("  키보드  "))
+                .andExpect(jsonPath("$.name").value("키보드"))
                 .andExpect(jsonPath("$.price").value(50000));
 
         mockMvc.perform(get("/item/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("  키보드  "));
+                .andExpect(jsonPath("$.name").value("키보드"));
 
         mockMvc.perform(get("/item"))
                 .andExpect(status().isOk())
@@ -108,14 +110,12 @@ class CollectionItemIntegrationTest {
 
     @ParameterizedTest
     @ValueSource(strings = {" ", "   "})
-    @DisplayName("공백만 있는 이름도 길이 조건을 만족하면 그대로 저장한다")
-    void preserveWhitespaceName(String name) throws Exception {
+    @DisplayName("공백만 있는 이름은 거부하고 저장하지 않는다")
+    void rejectWhitespaceName(String name) throws Exception {
         mockMvc.perform(post("/item").contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"%s\",\"price\":0}".formatted(name)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value(name))
-                .andExpect(jsonPath("$.price").value(0))
-                .andExpect(jsonPath("$.stock").value(org.hamcrest.Matchers.nullValue()));
+                .andExpect(status().isBadRequest());
+        mockMvc.perform(get("/item")).andExpect(content().json("[]"));
     }
 
     @Test
