@@ -30,7 +30,6 @@ public class GlobalExceptionHandler {
         List<String> errors = constraintViolations.stream()
                 .map(constraintViolation -> extractField(constraintViolation.getPropertyPath()) + ", " + constraintViolation.getMessage())
                 .toList();
-
         ErrorMessage errorMessage = new ErrorMessage(errors);
         return new ResponseEntity(errorMessage,HttpStatus.BAD_REQUEST);
     }
