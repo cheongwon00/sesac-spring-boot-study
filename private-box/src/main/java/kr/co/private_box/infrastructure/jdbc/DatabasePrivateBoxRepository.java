@@ -1,4 +1,4 @@
-package kr.co.private_box.infrastructure;
+package kr.co.private_box.infrastructure.jdbc;
 
 import kr.co.private_box.domain.PrivateBox;
 import kr.co.private_box.domain.PrivateBoxRepository;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-@Primary
+//@Primary
 public class DatabasePrivateBoxRepository implements PrivateBoxRepository {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 

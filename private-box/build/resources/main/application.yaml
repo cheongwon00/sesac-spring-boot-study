@@ -1,6 +1,15 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/private_box
+    url: jdbc:mysql://localhost:3306/private_box?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate      # 기존 테이블과 엔티티가 맞는지 검사만 함
+    open-in-view: false
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true

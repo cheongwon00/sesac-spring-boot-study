@@ -1,17 +1,29 @@
 package kr.co.private_box.domain;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import org.springframework.http.HttpStatus;
 
 import java.util.Random;
 
+@Entity
+@Table(name = "private_boxes")
 public class PrivateBox {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String originalUrl;
+
+    @Column(nullable = false,unique = true)
     private String privateUrl;
 
-    @Size(min = 0, max = 20,message = "private url의 비밀번호의 길이는 0~20입니다.")
+    @Column(length = 20)
     private String urlPassword;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private PrivateBoxStatus privateBoxStatus;
 
     public PrivateBox() {
